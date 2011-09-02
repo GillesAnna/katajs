@@ -152,16 +152,8 @@ Kata.require([
         return [a[1]*b[2] - a[2]*b[1], a[2]*b[0] - a[0]*b[2], a[0]*b[1] - a[1]*b[0] ];
     };
 
-    Kata.Quaternion.prototype.multiply = function(other) {
-        if (other.prototype === Kata.Quaternion) {
-            return new Kata.Quaternion(
-                this[3]*other[0] + this[0]*other[3] + this[1]*other[2] - this[2]*other[1],
-                this[3]*other[1] + this[1]*other[3] + this[2]*other[0] - this[0]*other[2],
-                this[3]*other[2] + this[2]*other[3] + this[0]*other[1] - this[1]*other[0],
-                this[3]*other[3] - this[0]*other[0] - this[1]*other[1] - this[2]*other[2]
-            );
-        }
-        else if (typeof(other.length) !== "undefined" && other.length === 3) {
+    Kata.Quaternion.prototype.multiply = function(other) {    
+        if (typeof(other.length) !== "undefined" && other.length === 3) {
             var quat_axis = [ this[0], this[1], this[2] ];
             var uv = Kata.Quaternion._vec3_cross(quat_axis, other);
             var uuv = Kata.Quaternion._vec3_cross(quat_axis, uv);
@@ -171,14 +163,25 @@ Kata.require([
                     other[1] + uv[1] + uuv[1],
                     other[2] + uv[2] + uuv[2]];
         }
-        else
-            throw "Don't know how to multiply given type by quaternion.";
+        else{
+        	try{
+            return new Kata.Quaternion(
+                this[3]*other[0] + this[0]*other[3] + this[1]*other[2] - this[2]*other[1],
+                this[3]*other[1] + this[1]*other[3] + this[2]*other[0] - this[0]*other[2],
+                this[3]*other[2] + this[2]*other[3] + this[0]*other[1] - this[1]*other[0],
+                this[3]*other[3] - this[0]*other[0] - this[1]*other[1] - this[2]*other[2]
+            );
+        	}
+        	catch (e){
+        		throw "Don't know how to multiply given type by quaternion." ;
+        	} 
+        }
     };
 
     Kata.Quaternion.prototype.inverse = function() {
-        var len = lengthSquared();
+        var len = this.sizeSquared();
         if (len > 1e-8) {
-            return new Quaternion(-x/len,-y/len,-z/len,w/len);
+            return new Kata.Quaternion(-this[0]/len,-this[1]/len,-this[2]/len,this[3]/len);
         }
         return Kata.Quaternion.zero();
     };
