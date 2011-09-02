@@ -334,8 +334,8 @@ Kata.LocationCopyUnifyTime= function(msg, destination) {
         if (msg.pos!==undefined){
                 destination.pos=msg.pos.slice();
         }
-        if (msg.orient!==undefined) {            
-            destination.orient=msg.orient.slice();
+        if (msg.orient!==undefined) {       
+	     destination.orient=msg.orient.slice();
         }
         if (msg.rotvel!==undefined && msg.rotaxis!==undefined) {
             destination.rotvel=msg.rotvel;

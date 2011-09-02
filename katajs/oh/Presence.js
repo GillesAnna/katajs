@@ -289,7 +289,7 @@ Kata.require([
              return;
 
          var update = {
-             orient:val.concat(),
+             orient:val.array(),
              rotaxis:this._requestedRotationalAxis(), rotvel:this._requestedAngularSpeed(),
              time:Kata.now(this.mSpace)
          };
