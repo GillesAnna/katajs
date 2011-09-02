@@ -145,7 +145,8 @@ Kata.require([
         if (this.objects[msg.id] === undefined)
             console.error("Cannot add a mesh. Object " + msg.id + " does not exist.");
         else
-            this.objects[msg.id].initMesh(
+        	var obj = this.objects[msg.id]; 
+            obj.initMesh(
                 msg.mesh,
                 msg.type === undefined ? "xml3d" : msg.type
             );
@@ -548,7 +549,7 @@ Kata.require([
                             }
 
                             // notify gfx that we have loaded the mesh
-                            thus.gfx.inputCallback({msg: "loaded", id: thus.id});
+                            thus.gfx.inputCallback({msg: "loaded", id: thus.id, mesh: thus.mesh});
                         }
                         else
                             thus.gfx.inputCallback({msg: "failedToParse", id: thus.id});
