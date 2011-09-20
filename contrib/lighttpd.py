@@ -25,7 +25,8 @@ server.modules              = (
             "mod_alias",
             "mod_accesslog",
             "mod_compress",
-            "mod_dirlisting"
+            "mod_dirlisting",
+            "mod_fastcgi"
 )
 server.document-root       = "%(pwd)s/"
 server.errorlog            = "%(pwd)s/lighttpd.error.log"
@@ -40,7 +41,7 @@ server.port               = %(port)d
 #include_shell "/usr/share/lighttpd/create-mime.assign.pl"
 # Set up the appropriate MIME type mappings
 mimetype.assign             = (
-  ".pdf"          =>      "application/pdf",
+  ".pdf"          =>      "application/pdf",  
   ".sig"          =>      "application/pgp-signature",
   ".spl"          =>      "application/futuresplash",
   ".class"        =>      "application/octet-stream",
@@ -71,6 +72,7 @@ mimetype.assign             = (
   ".html"         =>      "text/html",
   ".htm"          =>      "text/html",
   ".xhtml"        =>      "application/xhtml+xml",
+  ".php"	  =>	  "text/php",
   ".js"           =>      "text/javascript",
   ".asc"          =>      "text/plain",
   ".c"            =>      "text/plain",
