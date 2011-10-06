@@ -28,6 +28,11 @@ server.modules              = (
             "mod_dirlisting",
             "mod_fastcgi"
 )
+fastcgi.server = ( ".php" => (( 
+                     "bin-path" => "/usr/bin/php5-cgi",
+                     "socket" => "/tmp/php.socket" 
+                 )))
+
 server.document-root       = "%(pwd)s/"
 server.errorlog            = "%(pwd)s/lighttpd.error.log"
 index-file.names           = ( "index.php", "index.html",
