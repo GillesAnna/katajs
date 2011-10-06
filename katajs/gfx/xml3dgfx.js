@@ -124,7 +124,8 @@ Kata.require([
         {
             // update may reschedule itself again by returning false
             // otherwise it is deleted from the list of update
-            if (this.scheduledUpdates[index]())
+            var updateFunc = this.scheduledUpdates[index];
+            if (updateFunc())
                 delete this.scheduledUpdates[index];
         }
     };
