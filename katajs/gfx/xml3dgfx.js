@@ -90,22 +90,22 @@ Kata.require([
     };
 
     XML3DGraphics.initialize = function(scenefile, cb) {
-    	if (scenefile != null)
-    	{
-    		$.ajax({
-	            url: scenefile,
-	            success: function(data) {
-	                window.xml3dText = data;
-	                cb();
-	            },
-	            error: function() {
-	                cb();
-	            },
-	            dataType: "text"
-	        });
-    	} else {
-    		cb();
-    	}
+        if (scenefile)
+        {
+            $.ajax({
+                url: scenefile,
+                success: function(data) {
+                    window.xml3dText = data;
+                    cb();
+                },
+                error: function() {
+                    cb();
+                },
+                dataType: "text"
+            });
+        } else {
+            cb();
+        }
     }
 
     // push an update into the queue and return it's index
@@ -293,7 +293,8 @@ Kata.require([
             dir: null, // computed below
             shiftKey: e.shiftKey,
             ctrlKey: e.ctrlKey,
-            altKey: e.altKey
+            altKey: e.altKey,
+            target: e.target.id
         };
 
         // correct position relative to canvas
@@ -334,12 +335,32 @@ Kata.require([
 
             // look for object id
             var elem = e.target;
-            while (!elem.hasAttribute("sirikataObject") && elem.tagName != "xml3d")
-                elem = elem.parentNode;
-            if (elem.tagName != "xml3d")
-                msg.id = elem.id;
-            else
+            if (elem.tagName == "xml3d")
+            {
+                // we have hit an empty space
                 msg.id = null;
+                msg.idHint = "nothing";
+            }
+            else
+            {
+                // search for parent Sirikata object or scene root
+                while (!elem.hasAttribute("sirikataObject") && elem.tagName != "xml3d")
+                    elem = elem.parentNode;
+
+                if (elem.tagName == "xml3d")
+                {
+                    // we have hit an object that is only loaded locally and is not known to the
+                    // space server
+                    msg.id = null;
+                    msg.idHint = "local-world-object";
+                }
+                else
+                {
+                    // we have hit a Sirikata object
+                    msg.id = elem.id;
+                    msg.idHint = "sirikata-object";
+                }
+            }
 
             this.inputCallback(msg);
         }
@@ -497,8 +518,8 @@ Kata.require([
                                 var location = Kata.LocationExtrapolate(this.curLocation, new Date().getTime());
 
                                 this.transform.translation.x = location.pos[0];
-                                this.transform.translation.x = location.pos[1];
-                                this.transform.translation.x = location.pos[2];
+                                this.transform.translation.y = location.pos[1];
+                                this.transform.translation.z = location.pos[2];
                                 this.transform.rotation.setQuaternion(new XML3DVec3(location.orient[0], location.orient[1], location.orient[2]), location.orient[3]);
 
                                 return !interpolate;
@@ -511,7 +532,7 @@ Kata.require([
                             thus.group = document.createElementNS(org.xml3d.xml3dNS, "group");
                             thus.group.setAttribute("id", thus.id);
                             thus.group.setAttribute("sirikataObject", "true");
-                            thus.group.transform = "#" + thus.transformID;
+                            thus.group.setAttribute("transform", "#" + thus.transformID);
                             // TODO: set shader when support will be added to JavascriptGraphicsAPI
                             thus.gfx.root.appendChild(thus.group);
 
