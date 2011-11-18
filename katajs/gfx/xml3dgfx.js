@@ -34,7 +34,8 @@
 
 Kata.require([
     'katajs/oh/GraphicsSimulation.js',
-    ['externals/xml3d/xml3d.js', 'externals/xml3d/xml3d_animation.js', ]//'externals/xml3d/xml3d_interaction.js']
+    
+    ['externals/xml3d/xml3d.js', 'externals/xml3d/xml3d_animation.js' , 'externals/xml3d/xml3d_interaction.js']
 ], function() {
 
     /* XML3DGraphics class */
