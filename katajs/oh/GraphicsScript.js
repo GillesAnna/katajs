@@ -171,7 +171,8 @@ Kata.require([
         }
         var msg = new Kata.ScriptProtocol.FromScript.RegisterGUIMessage(presence.space(), presence.id(), presence.id());
         this._sendHostedObjectMessage(msg);
-        
+        msg = new Kata.ScriptProtocol.FromScript.GFXEnableEvent(presence.space(), "mousemove");
+        this._sendHostedObjectMessage(msg);
         msg = new Kata.ScriptProtocol.FromScript.GFXEnableEvent(presence.space(), "drag");
         this._sendHostedObjectMessage(msg);
         msg = new Kata.ScriptProtocol.FromScript.GFXEnableEvent(presence.space(), "pick"); // FIXME: Should be configurable.
