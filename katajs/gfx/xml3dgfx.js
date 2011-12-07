@@ -327,6 +327,7 @@ Kata.require([
         this.inputCallback(msg);
 
         this.lastMouseDownPosition = {x: e.clientX, y: e.clientY};
+        this.lastMoveMessage = {x: e.clientX, y: e.clientY};
 
         if (this.pickMessageEnabled)
         {
@@ -398,7 +399,7 @@ Kata.require([
     };
 
     XML3DGraphics.prototype.mouseMove = function(e) {
-        if (this.mouseMoveMessageEnabled)
+        if (this.mouseMoveMessageEnabled && !(this.lastMouseDownPosition))//do not want a mousemove message when i get a drag message
         {
             var msg = this.initMouseEventMessage(e, "mousemove");
             this.inputCallback(msg);
@@ -409,7 +410,12 @@ Kata.require([
             var msg = this.initMouseEventMessage(e, "drag");
             msg.dx = msg.clientX - this.lastMouseDownPosition.x;
             msg.dy = msg.clientY - this.lastMouseDownPosition.y;
+            msg.dxCurrent = msg.clientX - this.lastMoveMessage.x;
+            msg.dyCurrent = msg.clientY - this.lastMoveMessage.y;
             this.inputCallback(msg);
+            this.lastMoveMessage.x = msg.clientX;
+            this.lastMoveMessage.y = msg.clientY;
+            //TODO this approach doesnt work correctly 
         }
     };
 
